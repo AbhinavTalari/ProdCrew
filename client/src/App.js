@@ -1,61 +1,49 @@
-import React, { Component } from "react";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import jwt_decode from "jwt-decode";
-import setAuthToken from "./utils/setAuthToken";
+import React from 'react';
+import { Router, Route } from 'react-router-dom';
+import { createMuiTheme } from '@material-ui/core/styles';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import { ThemeProvider } from '@material-ui/styles';
+import { SnackbarProvider } from 'notistack';
 
-import { setCurrentUser, logoutUser } from "./actions/authActions";
-import { Provider } from "react-redux";
-import store from "./store";
+import history from './Utilities/history';
+import PrivateRoute from './Utilities/private-route';
+import Home from './Home/Home';
+import Chat from './Chat/Chat';
 
-import Navbar from "./components/layout/Navbar";
-import Landing from "./components/layout/Landing";
-import Register from "./components/auth/Register";
-import Login from "./components/auth/Login";
-import PrivateRoute from "./components/private-route/PrivateRoute";
-import Dashboard from "./components/dashboard/Dashboard";
-import background from './images/bgimg.jpg';
+const theme = createMuiTheme({
+    palette: {
+        primary: {
+            light: '#58a5f0',
+            main: '#0277bd',
+            dark: '#004c8c',
+        },
+        secondary: {
+            light: '#ffd95a',
+            main: '#f9a825',
+            dark: '#c17900',
+            contrastText: '#212121',
+        },
+        background: {
+            default: '#f0f0f0',
+        },
+    },
+    typography: {
+        useNextVariants: true,
+    },
+});
 
-import "./App.css";
-
-// Check for token to keep user logged in
-if (localStorage.jwtToken) {
-  // Set auth token header auth
-  const token = localStorage.jwtToken;
-  setAuthToken(token);
-  // Decode token and get user info and exp
-  const decoded = jwt_decode(token);
-  // Set user and isAuthenticated
-  store.dispatch(setCurrentUser(decoded));
-  // Check for expired token
-  const currentTime = Date.now() / 1000; // to get in milliseconds
-  if (decoded.exp < currentTime) {
-    // Logout user
-    store.dispatch(logoutUser());
-
-    // Redirect to login
-    window.location.href = "./login";
-  }
-}
-class App extends Component {
-  render() {
+function App() {
     return (
-      <Provider store={store}>
-        <Router>
-          <div className="App">
-          
-            <Navbar />
-            <Route exact path="/" component={Landing} />
-            <Route exact path="/register" component={Register} />
-            <Route exact path="/login" component={Login} />
-            <Switch>
-              <PrivateRoute exact path="/dashboard" component={Dashboard} />
-              
-            </Switch>
-          </div>
-          
-        </Router>
-      </Provider>
+        <ThemeProvider theme={theme}>
+            <CssBaseline />
+            <SnackbarProvider maxSnack={3} autoHideDuration={3000}>
+                <Router history={history}>
+                    <Route path="/" exact component={Home} />
+                    <PrivateRoute path="/chat" component={Chat} />
+                </Router>
+            </SnackbarProvider>
+        </ThemeProvider>
     );
-  }
 }
+
 export default App;
