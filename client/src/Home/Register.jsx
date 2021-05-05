@@ -17,6 +17,10 @@ const useStyles = makeStyles(theme => ({
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
+        backgroundColor:'white',
+        padding:theme.spacing(4),
+        borderRadius:"25px",
+
     },
     form: {
         width: '100%',

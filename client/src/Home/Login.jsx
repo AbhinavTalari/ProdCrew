@@ -18,7 +18,10 @@ const useStyles = makeStyles(theme => ({
         marginTop: theme.spacing(8),
         display: 'flex',
         backgroundColor:'white',
-        padding:theme.spacing(3),
+        padding:theme.spacing(4),
+        borderRadius:"25px",
+        height:"500px",
+        paddingTop:theme.spacing(15),
         flexDirection: 'column',
         alignItems: 'right',
         
